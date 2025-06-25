@@ -136,11 +136,10 @@ fn handle_event(event: Event, active_threads: Arc<Mutex<Vec<(JoinHandle<()>, Pat
     }
 }
 
-fn execute_command_on_file(path: &Path, stop_rx: Receiver<()>) {
-    let command = "ndnputchunks"; // Replace with the command you wish to run
-    let file_name = path.file_name().unwrap().to_string_lossy().to_string();
+fn execute_command_on_file(identity: &String, stop_rx: Receiver<()>) {
+    let command = "ndnserve";
     let child = Command::new(command)
-        .arg(format!("/ndn/fossn/files/{}", file_name))
+        .arg(format!("{}/sensor/0", identity))
         .stdin(std::process::Stdio::piped())
         .spawn()
         .unwrap();
