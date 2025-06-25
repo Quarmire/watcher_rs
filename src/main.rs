@@ -136,10 +136,12 @@ fn handle_event(event: Event, active_threads: Arc<Mutex<Vec<(JoinHandle<()>, Pat
     }
 }
 
-fn execute_command_on_file(identity: &String, stop_rx: Receiver<()>) {
+fn execute_command_on_file(path: &Path, stop_rx: Receiver<()>) {
+    let identity = "/muas/iuas-01";
     let command = "ndnserve";
+    let file_name = path.file_name().unwrap().to_string_lossy().to_string();
     let child = Command::new(command)
-        .arg(format!("{}/sensor/0", identity))
+        .arg(format!("{}/sensor/0/{}", identity, file_name))
         .stdin(std::process::Stdio::piped())
         .spawn()
         .unwrap();
